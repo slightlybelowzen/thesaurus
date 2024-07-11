@@ -28,8 +28,36 @@ export const {
       serif: 'Lora, serif',
       mono: 'Inconsolata, ui-monospace',
     },
+    fontSizes: {
+      sm: '0.875rem',
+      base: '1rem',
+    },
+    space: {
+      sm: '0.125rem',
+      base: '0.25rem',
+    },
+    radii: {
+      base: '0.5rem',
+    },
   },
   media: {
     laptop: '(min-width: 1024px)',
+  },
+});
+
+export const globalStyles = globalCss({
+  '*, *::before, *::after': {
+    boxSizing: 'border-box',
+    margin: 0,
+    padding: 0,
+  },
+  'html, body': {
+    fontFamily: '$sans_serif',
+    fontSize: '$base',
+    color: '$black_100',
+    '-webkit-font-smoothing': 'antialiased',
+  },
+  '*': {
+    boxSizing: 'border-box',
   },
 });

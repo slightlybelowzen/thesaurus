@@ -1,17 +1,19 @@
 <script lang="ts">
-  import Counter from './lib/Counter.svelte';
-  import { css } from './styles/stitches.config';
+  import Navbar from './lib/Navbar.svelte';
+  import SearchInput from './lib/SearchInput.svelte';
+  import { css, globalStyles } from './styles/stitches.config';
+
+  globalStyles();
 
   const classes = {
     container: css({
-      maxWidth: '1024px',
+      maxWidth: '736px',
       margin: '0 auto',
     }),
   };
 </script>
 
 <main class={classes.container()}>
-  <div>
-    <Counter />
-  </div>
+  <Navbar />
+  <SearchInput />
 </main>
