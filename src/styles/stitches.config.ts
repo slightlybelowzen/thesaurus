@@ -26,7 +26,7 @@ export const {
     fonts: {
       sans_serif: 'Inter, sans-serif',
       serif: 'Lora, serif',
-      mono: 'Inconsolata, ui-monospace',
+      mono: 'Inconsolata, Menlo',
     },
     fontSizes: {
       sm: '0.875rem',
@@ -54,7 +54,7 @@ export const globalStyles = globalCss({
   'html, body': {
     fontFamily: '$sans_serif',
     fontSize: '$base',
-    color: '$black_100',
+    color: '$black_200',
     '-webkit-font-smoothing': 'antialiased',
   },
   '*': {

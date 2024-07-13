@@ -1,45 +1,36 @@
 <script lang="ts">
   import { css } from '../styles/stitches.config';
+  import DictionaryDisplay from './DictionaryDisplay.svelte';
+  import type { Dictionary } from './types';
+  import { fetchWordInformation } from './utils';
 
   let word: string = '';
-  interface Definition {
-    definition: string;
-    antonyms: string[];
-    synonyms: string[];
-  }
-
-  interface Meaning {
-    definitions: Definition[];
-    partOfSpeech: string;
-    antonyms: string[];
-    synonyms: string[];
-  }
-
-  interface ResponseObject {
-    phonetic: string;
-    word: string;
-    sourceUrls: string[];
-    meanings: Meaning[];
-  }
+  let dictionary: Dictionary = {
+    meanings: [],
+    phonetic: '',
+    word: '',
+    sourceUrls: [],
+  } as Dictionary;
+  let error = '';
+  let initialLoad = true;
 
   //   event handlers
   async function handleSubmit() {
-    const response = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-    );
-    const data = await response.json();
-    if (data.length === 0) {
-      throw new Error('No results found');
+    initialLoad = false;
+    if (word === '') {
+      error = "Whoops, can't be empty";
     }
-    const responseObject = data[0] as ResponseObject;
-    console.log(responseObject.meanings);
+    const data = await fetchWordInformation(word);
+    if (data instanceof Error) {
+      error = data.message;
+      throw new Error(error);
+    }
+    dictionary = data;
+    word = '';
   }
 
   //   styles
   const classes = {
-    container: css({
-      position: 'relative',
-    }),
     input: css({
       width: '100%',
       height: 64,
@@ -47,8 +38,7 @@
       paddingLeft: '1.5rem',
       border: 0,
       outline: 'transparent 1px solid',
-      backgroundColor: '$gray_200',
-      fontFamily: '$sans_serif',
+      backgroundColor: '$gray_100',
       fontWeight: 'bold',
       color: '$black_200',
       fontSize: '20px',
@@ -62,10 +52,7 @@
       },
 
       '&::placeholder': {
-        fontWeight: 'bold',
-        color: '$black_200',
-        opacity: 0.5,
-        fontSize: '20px',
+        opacity: 0.25,
       },
     }),
     button: css({
@@ -80,7 +67,7 @@
 
 <form
   method="get"
-  class={classes.container()}
+  class={css({ position: 'relative', marginBottom: 45, marginTop: 52 })()}
   on:submit|preventDefault={handleSubmit}
 >
   <input
@@ -110,3 +97,11 @@
     >
   </button>
 </form>
+
+{#if !initialLoad && error !== ''}
+  <div>Nope, try again!</div>
+{:else}
+  {#key dictionary}
+    <DictionaryDisplay {dictionary} />
+  {/key}
+{/if}
